@@ -1,14 +1,15 @@
-﻿using HospitalApplicationFirst.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿//using HospitalApplicationFirst.Models.Entities;
+using HospitalApplicationFirst.Models.Entities;
+using HospitalApplicationFirst.Models.ViewModels;
+using HospitalApplicationFirst.Services;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace HospitalApplicationFirst.Controllers
 {
     public class EmployeeController : Controller
     {
+
         [HttpGet]
         public ActionResult Index(int? specialty, string name, int page = 1)
         {
@@ -18,11 +19,37 @@ namespace HospitalApplicationFirst.Controllers
         }
 
         [HttpGet]
-        public ActionResult Info(int id)
-        {
+        public ActionResult Employee(int id)
+        {          
             var employee = EmployeeService.Instance.GetEmployeeById(id);
 
-            return View(employee);
+            EmployeeDetailViewModel viewModel = new EmployeeDetailViewModel();
+
+            viewModel.Employee = employee;
+
+            var schedules = EmployeeService.Instance.GetSchedulesByEmployeeId(employee.Id);
+
+            viewModel.Schedules = schedules;
+
+            if (employee == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(viewModel);
         }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult Record(Visit visit)
+        {
+            string email = User.Identity.Name;
+
+            UserService.Instance.RecordToDoctor(visit, email);
+
+            return RedirectToAction("Index");
+        }
+
+        
     }
 }

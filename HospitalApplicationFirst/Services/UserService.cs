@@ -66,11 +66,20 @@ namespace HospitalApplicationFirst.Services
             return visits.Where(v => v.UserId == id);
         }
 
-        public void RecordToDoctor(Visit visit)
+        public void RecordToDoctor(Visit visit, string email)
         {
             visit.isFinished = false;
 
+            var user = UserDAO.Instance.GetUserByEmail(email);
+
+            visit.UserId = user.Id;
+
             VisitDAO.Instance.Insert(visit);
+        }
+
+        public User GetUserByEmail(string email)
+        {
+            return UserDAO.Instance.GetUserByEmail(email);
         }
     }
 }

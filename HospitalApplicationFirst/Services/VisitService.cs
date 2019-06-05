@@ -45,6 +45,12 @@ namespace HospitalApplicationFirst.Services
             return visits.Where(v => v.EmployeeId == id);
         }
 
+        public void UpdateVisit(Visit visit)
+        {
+            visit.isFinished = true;
 
+            VisitDAO.Instance.Update(visit);
+
+        }
     }
 }

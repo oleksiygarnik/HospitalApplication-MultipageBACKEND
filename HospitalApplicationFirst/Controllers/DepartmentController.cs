@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace HospitalApplicationFirst.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class DepartmnetController : Controller
     {
         
@@ -44,7 +44,7 @@ namespace HospitalApplicationFirst.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPut]
         public ActionResult EditDepartment(Department department)
         {
             DepartmentService.Instance.CorrectInformation(department);
@@ -52,7 +52,8 @@ namespace HospitalApplicationFirst.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult DeleteITApplication(int id)
+        [HttpGet]
+        public ActionResult DeleteDepartment(int id)
         {
             DepartmentService.Instance.RemoveDepartment(id);
 

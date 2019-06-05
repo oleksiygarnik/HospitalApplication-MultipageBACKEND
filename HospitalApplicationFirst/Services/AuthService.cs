@@ -37,6 +37,7 @@ namespace HospitalApplicationFirst.Services
 
         public void SignIn(string email)
         {
+            
             FormsAuthentication.SetAuthCookie(email, true);
         }
     }
